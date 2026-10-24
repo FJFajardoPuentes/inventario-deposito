@@ -27,3 +27,6 @@ Thumbs.db
 
 # Script privado para crear el administrador
 crear-admin.js
+
+# Permitir la base de datos de demostracion
+!inventario.db
