@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Inventario Interno Depósito</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0d6efd">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Inventario">
+</head>
+<body>
+
+  <main class="contenedor">
+
+    <h1>Inventario Interno de Depósito</h1>
+
+<div class="barra-usuario">
+  <span id="usuarioActual"></span>
+
+  <div>
+    <button onclick="mostrarPantalla('pantallaCambiarClave')">Cambiar clave</button>
+    <button onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</div>
+
+    <nav class="menu">
+      <button id="btnAlta" onclick="mostrarPantalla('pantallaAlta')">ALTA</button>
+      <button id="btnBaja" onclick="mostrarPantalla('pantallaBaja')">BAJA</button>
+      <button onclick="mostrarPantalla('pantallaBajaAdaptadores')">ADAPTADORES</button>
+      <button onclick="mostrarPantalla('pantallaConsultas')">CONSULTAS</button>
+      <button onclick="mostrarPantalla('pantallaStock')">STOCK</button>
+      <button onclick="mostrarPantalla('pantallaMovimientos')">MOVIMIENTOS</button>
+      <button id="btnUsuarios" class="oculto" onclick="mostrarPantalla('pantallaUsuarios')">USUARIOS</button>
+    </nav>
+
+    <p id="mensaje"></p>
+
+    <!-- ALTA de AF -->
+    <section id="pantallaAlta" class="pantalla">
+      <h2>Alta de activo</h2>
+
+      <label>Activo fijo</label>
+      <input id="altaActivoFijo" placeholder="Escanear o ingresar AF">
+
+      <label>Producto</label>
+      <input id="altaProducto" placeholder="Ej: Memoria RAM">
+
+      <label>Marca</label>
+      <input id="altaMarca" placeholder="Ej: Kingston">
+
+      <label>Modelo</label>
+      <input id="altaModelo" placeholder="Ej: DDR4 8GB">
+
+      <label>Tipo de producto</label>
+      <input id="altaTipoProducto" placeholder="Ej: RAM, Laptop, Monitor">
+
+      <button class="accion" onclick="registrarAlta()">Registrar ALTA</button>
+
+      <hr>
+
+<div id="bloqueImportarExcel" class="bloque-importar oculto">
+  <h3>Alta masiva desde Excel</h3>
+
+  <p>El archivo debe tener las columnas:</p>
+
+  <pre>activo_fijo | producto | marca | modelo | tipo_producto | estado</pre>
+
+  <label>Seleccionar archivo Excel</label>
+  <input id="archivoExcel" type="file" accept=".xlsx,.xls">
+
+  <button class="accion" onclick="importarExcel()">Importar Excel</button>
+
+  <div id="resultadoImportacion"></div>
+</div>
+    </section>
+
+<!-- BAJA de AF -->
+<section id="pantallaBaja" class="pantalla oculto">
+  <h2>Baja de activo</h2>
+
+  <label>Activo fijo</label>
+  <input id="bajaActivoFijo" placeholder="Escanear o ingresar AF">
+
+  <button class="accion" onclick="verificarActivoBaja()">Verificar AF</button>
+
+  <div id="previewBaja" class="preview oculto"></div>
+
+  <button 
+    id="btnRegistrarBaja"
+    class="accion peligro"
+    onclick="registrarBaja()"
+    disabled
+  >
+    Registrar BAJA
+  </button>
+</section>
+
+    <!-- CONSULTAS -->
+    <section id="pantallaConsultas" class="pantalla oculto">
+      <h2>Consultas</h2>
+
+      <input id="buscarConsulta" placeholder="Buscar por AF, producto, modelo o estado">
+
+      <button class="accion" onclick="cargarConsultas()">Buscar</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Activo fijo</th>
+            <th>Producto</th>
+            <th>Modelo</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody id="tablaConsultas"></tbody>
+      </table>
+    </section>
+
+    <!-- STOCK -->
+<section id="pantallaStock" class="pantalla oculto">
+  <h2>Stock agrupado</h2>
+
+  <input id="buscarStock" placeholder="Buscar por producto, modelo o tipo">
+
+  <button class="accion" onclick="cargarStock()">Buscar / Actualizar stock</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Modelo</th>
+            <th>Cantidad</th>
+            <th>Alerta</th>
+          </tr>
+        </thead>
+        <tbody id="tablaStock"></tbody>
+      </table>
+    </section>
+
+    <!-- MOVIMIENTOS -->
+<section id="pantallaMovimientos" class="pantalla oculto">
+  <h2>Historial de movimientos</h2>
+
+  <input id="buscarMovimientos" placeholder="Buscar por AF, movimiento, producto, modelo, usuario o fecha">
+
+  <button class="accion" onclick="cargarMovimientos()">Buscar / Actualizar movimientos</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Activo fijo</th>
+        <th>Movimiento</th>
+        <th>Fecha y hora</th>
+        <th>Producto</th>
+        <th>Modelo</th>
+        <th>Usuario</th>
+      </tr>
+    </thead>
+    <tbody id="tablaMovimientos"></tbody>
+  </table>
+</section>
+
+<!-- USUARIOS -->
+<section id="pantallaUsuarios" class="pantalla oculto">
+  <h2>Administrar usuarios</h2>
+
+  <h3>Crear usuario</h3>
+
+  <label>Nombre</label>
+  <input id="nuevoUsuarioNombre" placeholder="Ej: Juan Pérez">
+
+  <label>Usuario</label>
+  <input id="nuevoUsuarioLogin" placeholder="Ej: jperez">
+
+  <label>Contraseña</label>
+  <input id="nuevoUsuarioPassword" type="password" placeholder="Contraseña">
+
+  <label>Rol</label>
+  <select id="nuevoUsuarioRol">
+    <option value="ADMIN">ADMIN</option>
+    <option value="CONSULTA">CONSULTA</option>
+    <option value="SUPER ADMIN">SUPER ADMIN</option>
+  </select>
+
+  <button class="accion" onclick="crearUsuario()">Crear usuario</button>
+  
+  <div id="resultadoClaveUsuario"></div>
+
+  <h3>Usuarios existentes</h3>
+
+  <button class="accion" onclick="cargarUsuarios()">Actualizar usuarios</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Usuario</th>
+        <th>Rol</th>
+        <th>Estado</th>
+        <th>Fecha</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody id="tablaUsuarios"></tbody>
+  </table>
+</section>
+
+<!-- CAMBIAR CLAVE -->
+<section id="pantallaCambiarClave" class="pantalla oculto">
+  <h2>Cambiar clave</h2>
+
+  <label>Clave actual</label>
+  <input id="claveActual" type="password" placeholder="Clave actual">
+
+  <label>Nueva clave</label>
+  <input id="nuevaClave" type="password" placeholder="Nueva clave">
+
+  <label>Confirmar nueva clave</label>
+  <input id="confirmarClave" type="password" placeholder="Confirmar nueva clave">
+
+  <button class="accion" onclick="cambiarClave()">Actualizar clave</button>
+</section>
+
+<!-- ADAPTADORES -->
+<section id="pantallaBajaAdaptadores" class="pantalla oculto">
+  <h2>Adaptadores</h2>
+
+  <p>Esta pantalla permite dar de alta y baja únicamente adaptadores.</p>
+  <p>
+  Si el adaptador es nuevo, completá todos los datos. 
+  Si ya existía y estaba en BAJA, alcanza con escanear el activo fijo.
+</p>
+
+  <div class="adaptadores-grid">
+
+    <!-- ALTA ADAPTADOR -->
+    <div class="adaptador-card">
+      <h3>Alta de adaptador</h3>
+
+      <label>Activo fijo</label>
+      <input id="altaAdaptadorActivoFijo" placeholder="Escanear o ingresar AF">
+
+      <label>Producto</label>
+      <input id="altaAdaptadorProducto" value="Adaptador" placeholder="Ej: Adaptador">
+
+      <label>Marca</label>
+      <input id="altaAdaptadorMarca" placeholder="Ej: Dell, HP, Genérico">
+
+      <label>Modelo</label>
+      <input id="altaAdaptadorModelo" placeholder="Ej: USB-C a HDMI">
+
+      <button class="accion" onclick="registrarAltaAdaptador()">Registrar ALTA adaptador</button>
+    </div>
+
+    <!-- BAJA ADAPTADOR -->
+    <div class="adaptador-card">
+      <h3>Baja de adaptador</h3>
+
+      <label>Activo fijo</label>
+      <input id="bajaAdaptadorActivoFijo" placeholder="Escanear o ingresar AF del adaptador">
+
+      <button class="accion" onclick="verificarAdaptadorBaja()">Verificar adaptador</button>
+
+      <div id="previewBajaAdaptador" class="preview oculto"></div>
+
+      <button 
+        id="btnRegistrarBajaAdaptador"
+        class="accion peligro"
+        onclick="registrarBajaAdaptador()"
+        disabled
+      >
+        Registrar BAJA adaptador
+      </button>
+    </div>
+
+  </div>
+</section>
+
+  </main>
+
+  <!-- MODAL DE CONFIRMACIÓN -->
+  <div id="modalConfirmacion" class="modal-overlay oculto">
+    <div class="modal-box">
+      <h3 id="modalTitulo">Confirmar acción</h3>
+
+      <p id="modalMensaje"></p>
+
+      <div class="modal-botones">
+        <button id="modalCancelar" class="btn-modal btn-cancelar">
+          Cancelar
+        </button>
+
+        <button id="modalAceptar" class="btn-modal btn-confirmar">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

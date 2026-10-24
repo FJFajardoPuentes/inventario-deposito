@@ -1,0 +1,29 @@
+
+# Carpeta de dependencias de Node.js
+node_modules/
+
+# Contraseñas y configuraciones privadas
+.env
+.env.*
+!.env.example
+
+# Bases de datos SQLite
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Archivos de registro
+*.log
+logs/
+
+# Copias de seguridad
+backups/
+
+# Archivos temporales de Windows
+Thumbs.db
+.DS_Store
+
+# Script privado para crear el administrador
+crear-admin.js
