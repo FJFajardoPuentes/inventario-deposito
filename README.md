@@ -41,28 +41,49 @@ El objetivo del proyecto es facilitar la organización de los recursos y mejorar
 
 ### Requisitos
 
-- Node.js y npm
-- Git
+- Node.js y npm instalados.
+- Git instalado.
+- Windows con PowerShell para seguir estos comandos.
 
-### Descargar el proyecto
+### 1. Clonar el repositorio
 
-Clonar el repositorio:
+```powershell
+git clone https://github.com/FJFajardoPuentes/inventario-deposito.git
+```
 
-`git clone https://github.com/FJFajardoPuentes/inventario-deposito.git`
+### 2. Entrar a la carpeta
 
-Entrar a la carpeta del proyecto:
+```powershell
+cd inventario-deposito
+```
 
-`cd inventario-deposito`
+### 3. Instalar las dependencias
 
-Instalar las dependencias:
+```powershell
+npm ci
+```
 
-`npm install`
+### 4. Configurar las variables de entorno
 
-### Configuración
+```powershell
+Copy-Item .env.example .env
+```
 
-La aplicación requiere configurar las variables de entorno y preparar una base de datos SQLite local.
+Editar el archivo .env con la configuración correspondiente.
 
-Por seguridad, el repositorio no incluye credenciales, contraseñas ni la base de datos utilizada en el entorno original.
+### 5. Iniciar la aplicación
+
+```powershell
+npm start
+```
+
+Abrir en el navegador la dirección local y el puerto que indique el servidor.
+
+### Base de datos
+
+El repositorio incluye inventario.db con datos ficticios de demostración.
+
+No es necesario crear manualmente la base de datos para probar la aplicación.
 
 ## Estado del proyecto
 
