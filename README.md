@@ -97,7 +97,7 @@ FJFajardoPuentes (facu101@hotmail.com)
 
 Conocé las principales funcionalidades de Inventario de Depósito mediante una demostración completa del sistema.
 
-[![Ver demostración de Inventario de Depósito](docs/img/portada-video.png)](https://youtu.be/57XvWfUmBj8)
+[![Ver demostración de Inventario de Depósito](docs/img/Portada-Video.png)](https://youtu.be/57XvWfUmBj8)
 
 **Contenido del video:**
 
